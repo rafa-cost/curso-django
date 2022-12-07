@@ -46,4 +46,9 @@ jobs:
       - name: Pytests
         run: |
           pipenv install --dev
-          pipenv run pytest
+          pipenv run pytest --cov=pypro
+
+      #codecov
+      - name: Codecov
+        run: | 
+          pipenv run codecov
