@@ -4,14 +4,18 @@ name: curso-django
 
 # Controls when the workflow will run
 on:
+
+permissions:
+  contents: read
+
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "7" ]
   pull_request:
     branches: [ "7" ]
 
-  permissions:
-    contents: read
+
+
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -24,6 +28,20 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    env:
+      PIPENV_NO_INHERIT: 1
+      PIPENV_IGNORE_VIRTUALENVS: 1
+      SECRET_KEY: ${{ secrets.SECRET_KEY}}
+
+    SERVICES:
+      postgres:
+        image: postgres:11.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports: ['5432-5432']
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -32,24 +50,34 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
+      - name: Copying configurations
+        run: |
+         cp contrib/env=sample .env
+        
 
       # Runs a single command using the runners shell
       - name: Install dependencies
         run: |
           pip install pipenv
-          pipenv sync -d
+          pipenv sync --dev
 
       # Runs a set of commands using the runners shell
-      - name: flake8
-        uses: py-actions/flake8@v2
+      - name: Lint  with flake8
+        run: |
+          pipenv run flake8 .
+        
 
       #pytest
-      - name: Pytests
+      - name: Test with pytest
         run: |
-          pipenv install --dev
-          pipenv run pytest --cov=pypro
+          pipenv run pytest pypro --cov=pypro
+          
+
+      - name: Posting Coverage
+        env:
+          pipenv run codecov
 
       #codecov
-      - name: Codecov
+      - name: Decouple
         run: | 
-          pipenv run codecov
+          cp contrib/env-sample .env
