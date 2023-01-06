@@ -44,23 +44,13 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                            'social_core.backends.google.GoogleOAth2')
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
-EMAIL_BACKEND = config('EMAIL_BACKEND')
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT')
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+
+
 
 INSTALLED_APPS = [
     'pypro.base',
-    'pypro.aperitivos',
-    'pypro.modulos',
-    'pypro.turmas',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,9 +58,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'collectfast',
     'django.contrib.staticfiles',
-    'ordered_model',
-    'django_extensions',
-    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -111,9 +98,6 @@ WSGI_APPLICATION = 'pypro.wsgi.application'
 
 INTERNAL_IPS = config('INTERNAL_IPS', cast=Csv(), default='127.0.0.1')
 
-if DEBUG:
-    INSTALLED_APPS.append('debug_toolbar')
-    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
