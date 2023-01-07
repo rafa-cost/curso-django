@@ -35,22 +35,14 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 AUTH_USER_MODEL = 'base.User'
 
-LOGIN_URL = '/contas/login/'
-LOGIN_REDIRECT_URL = '/modulos'
-LOGOUT_REDIRECT_URL = '/'
-# Application definition
-
-SOCIAL_AUTH_URL_NAMESPACE = 'social'
-
-AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
-                           'social_core.backends.google.GoogleOAth2')
+#ver se não preeeeecisa tirar isso
 
 
 
 
+#até aqui
 
 INSTALLED_APPS = [
-    'pypro.base',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'collectfast',
     'django.contrib.staticfiles',
+    'pypro.base',
 ]
 
 MIDDLEWARE = [
@@ -83,11 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'pypro.modulos.context_processors.listar_modulos',
 
-                # Social_Auth_Templates
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -96,16 +85,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pypro.wsgi.application'
 
-INTERNAL_IPS = config('INTERNAL_IPS', cast=Csv(), default='127.0.0.1')
-
+#conferir este
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 default_db_url = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-parse_database = partial (dj_database_url.parse, conn_max_age=600)
+parse_database = partial(dj_database_url.parse, conn_max_age=600)
 DATABASES = {
-    'default': config('DATABASE_URL', default=default_db_url, cast=parse_database)
+    'default': config('DATABASE_URL', default=default_db_url, cast=parse_database),
 }
 
 
@@ -145,7 +133,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
@@ -153,9 +141,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 COLLECTFAST_ENABLED = False
 
-AWS_ACCESS_KEY_ID=config('AWS_ACCESS_KEY_ID')
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
 
-#essa é a configuração que teremos para o S3 aws
+
 if AWS_ACCESS_KEY_ID:
     AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = config ('AWS_STORAGE_BUCKET_NAME')
@@ -185,9 +173,7 @@ if AWS_ACCESS_KEY_ID:
 
     INSTALLED_APPS.append('s3_folder_storage')
     INSTALLED_APPS.append('storages')
-
+#ng tem isso
     DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
     
-    SENTRY_DSN = config('SENTRY_DSN', default=None)
-    if SENTRY_DSN:
-        sentry_sdk.init(dsn=SENTRY_DSN, integrations=[DjangoIntegration()],)
+
