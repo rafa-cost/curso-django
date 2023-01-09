@@ -14,6 +14,7 @@ psycopg2-binary = "*"
 django-s3-folder-storage = "*"
 collectfast = "*"
 sentry-sdk = "*"
+social-auth-core = "*"
 
 [dev-packages]
 flake8 = "*"
